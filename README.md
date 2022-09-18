@@ -8,3 +8,7 @@ Boidの所属する空間のバウンディングをギズモ描画
 # FUTURE
 Boidsの群れの形成を線分8分木を使用して行うこと  
 3次元空間のパス生成  
+
+参考  
+https://github.com/edom18/MortonOrder  
+http://marupeke296.com/COL_3D_No15_Octree.html  
