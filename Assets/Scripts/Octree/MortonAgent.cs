@@ -3,6 +3,7 @@
 //
 // アプリサイドで使用する汎用的な分割空間システム
 //-----------------------------------------------------------------------------
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 public class MortonAgent : MonoBehaviour
@@ -14,13 +15,12 @@ public class MortonAgent : MonoBehaviour
         {
             if (m_manager == value) return;
 
-            // Remove from current manager.
+            // 現在のTreeDataから削除
             TreeData.Remove();
 
-            // Change to new manager and register myself.
+            // 新規TreeDataを登録
             m_manager = value;
             RegisterUpdate();
-            Debug.Log("Set Register.");
         }
     }
     public Bounds Bounds
@@ -56,7 +56,7 @@ public class MortonAgent : MonoBehaviour
 
     private void RegisterUpdate()
     {
-        m_manager.Register(Bounds, TreeData);
+        m_manager.Register(Bounds.min, Bounds.max, TreeData);
     }
 
 }

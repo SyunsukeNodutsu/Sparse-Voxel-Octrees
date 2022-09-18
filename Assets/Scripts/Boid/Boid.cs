@@ -35,13 +35,13 @@ public class Boid : MonoBehaviour
     /// <summary>求めたアクセル値をもとに移動</summary>
     private void UpdateMove()
     {
-        var dt = Time.deltaTime;
+        Velocity += m_accel * Time.deltaTime;
 
-        Velocity += m_accel * dt;
         var dir = Velocity.normalized;
         var speed = Velocity.magnitude;
         Velocity = Mathf.Clamp(speed, BoidParam.minSpeed, BoidParam.maxSpeed) * dir;
-        Position += Velocity * dt;
+
+        Position += Velocity * Time.deltaTime;
 
         var rot = Quaternion.LookRotation(Velocity);
         transform.SetPositionAndRotation(Position, rot);
