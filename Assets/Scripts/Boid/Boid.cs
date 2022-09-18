@@ -15,8 +15,8 @@ public class Boid : MonoBehaviour
     public Vector3 Position { get; private set; }
     public Vector3 Velocity { get; private set; }
 
-    private Vector3 accel = Vector3.zero;
-    private readonly List<Boid> neighborList = new();
+    private Vector3 m_accel = Vector3.zero;
+    private readonly List<Boid> m_neighborList = new();
 
     private void Start()
     {
@@ -27,13 +27,8 @@ public class Boid : MonoBehaviour
     private void Update()
     {
         UpdateNeighbors();
-
         UpdateWalls();
-
-        UpdateSeparation();
-        UpdateAlignment();
-        UpdateCohesion();
-
+        UpdateAccel();
         UpdateMove();
     }
 
@@ -42,7 +37,7 @@ public class Boid : MonoBehaviour
     {
         var dt = Time.deltaTime;
 
-        Velocity += accel * dt;
+        Velocity += m_accel * dt;
         var dir = Velocity.normalized;
         var speed = Velocity.magnitude;
         Velocity = Mathf.Clamp(speed, BoidParam.minSpeed, BoidParam.maxSpeed) * dir;
@@ -51,7 +46,7 @@ public class Boid : MonoBehaviour
         var rot = Quaternion.LookRotation(Velocity);
         transform.SetPositionAndRotation(Position, rot);
 
-        accel = Vector3.zero;
+        m_accel = Vector3.zero;
     }
 
     /// <summary>壁に反発</summary>
@@ -67,7 +62,7 @@ public class Boid : MonoBehaviour
         }
 
         var scale = BoidParam.wallScale * 0.5f;
-        accel +=
+        m_accel +=
             CalcAccelAgainstWall(-scale - Position.x, Vector3.right) +
             CalcAccelAgainstWall(-scale - Position.y, Vector3.up) +
             CalcAccelAgainstWall(-scale - Position.z, Vector3.forward) +
@@ -79,7 +74,7 @@ public class Boid : MonoBehaviour
     /// <summary>群れの形成</summary>
     void UpdateNeighbors()
     {
-        neighborList.Clear();
+        m_neighborList.Clear();
 
         if (!BoidSystem) return;
 
@@ -98,54 +93,35 @@ public class Boid : MonoBehaviour
                 var fwd = Velocity.normalized;
                 var prod = Vector3.Dot(fwd, dir);
                 if (prod > prodThresh)
-                    neighborList.Add(other);
+                    m_neighborList.Add(other);
             }
         }
     }
 
-    /// <summary>分離</summary>
-    void UpdateSeparation()
+    /// <summary>分離.整列.結合の3要素を計算</summary>
+    void UpdateAccel()
     {
-        if (neighborList.Count == 0) return;
+        if (m_neighborList.Count == 0) return;
 
-        Vector3 force = Vector3.zero;
-        foreach (var neighbor in neighborList)
+        Vector3 separation = Vector3.zero;
+        Vector3 alignment = Vector3.zero;
+        Vector3 cohesion = Vector3.zero;
+        foreach (var neighbor in m_neighborList)
         {
-            force += (Position - neighbor.Position).normalized;
+            separation += (Position - neighbor.Position).normalized;
+            alignment += neighbor.Velocity;
+            cohesion += neighbor.Position;
         }
-        force /= neighborList.Count;
 
-        accel += force * BoidParam.separationWeight;
-    }
+        // 平均値計算
+        separation /= m_neighborList.Count;
+        alignment /= m_neighborList.Count;
+        cohesion /= m_neighborList.Count;
 
-    /// <summary>整列</summary>
-    void UpdateAlignment()
-    {
-        if (neighborList.Count == 0) return;
-
-        var averageVelocity = Vector3.zero;
-        foreach (var neighbor in neighborList)
-        {
-            averageVelocity += neighbor.Velocity;
-        }
-        averageVelocity /= neighborList.Count;
-
-        accel += (averageVelocity - Velocity) * BoidParam.alignmentWeight;
-    }
-
-    /// <summary>結合</summary>
-    void UpdateCohesion()
-    {
-        if (neighborList.Count == 0) return;
-
-        var averagePos = Vector3.zero;
-        foreach (var neighbor in neighborList)
-        {
-            averagePos += neighbor.Position;
-        }
-        averagePos /= neighborList.Count;
-
-        accel += (averagePos - Position) * BoidParam.cohesionWeight;
+        // アクセル値計算
+        m_accel += separation * BoidParam.separationWeight;
+        m_accel += (alignment - Velocity) * BoidParam.alignmentWeight;
+        m_accel += (cohesion - Position) * BoidParam.cohesionWeight;
     }
 
 }
