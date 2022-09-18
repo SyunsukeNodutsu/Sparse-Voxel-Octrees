@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a53831d0792e58f42b68a55071ff89cd, type: 3}
   m_Name: BoidParam
   m_EditorClassIdentifier: Assembly-CSharp::Param
-  initSpeed: 2
+  initSpeed: 4
   minSpeed: 2
   maxSpeed: 5
   neighborDistance: 3
   neighborFov: 90
-  separationWeight: 5
-  wallScale: 20
+  wallScale: 40
   wallDistance: 3
   wallWeight: 1
+  separationWeight: 5
   alignmentWeight: 2
   cohesionWeight: 3

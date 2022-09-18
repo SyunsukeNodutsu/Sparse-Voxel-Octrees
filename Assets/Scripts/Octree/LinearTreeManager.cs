@@ -9,7 +9,7 @@ using UnityEngine;
 /// <summary>線形8分木空間管理マネージャー</summary>
 public class LinearTreeManager<T>
 {
-    private readonly int MAX_LEVEL = 4;// 分割最大数
+    private readonly int MAX_LEVEL = 6;// 分割最大数
 
     private int m_level = 1;// 分割レベル
     private Vector3 m_width = new(1, 1, 1);
@@ -108,19 +108,30 @@ public class LinearTreeManager<T>
         for (int i = level; i > 0; i--) s |= (number >> (3 * i - 0 - i) & (1 << i - 1));
         int z = s;
 
-        // まぁ、ビジュアライザー使用だからええか...
         {
-            if (level == 3 && x != 7) x -= (level + 4) - x;
-            if (level == 3 && y != 7) y -= (level + 4) - y;
-            if (level == 3 && z != 7) z -= (level + 4) - z;
+            if (level == 6 && x != 63) x -= 63 - x;
+            if (level == 6 && y != 63) y -= 63 - y;
+            if (level == 6 && z != 63) z -= 63 - z;// 31 + 32 = 63
 
-            if (level == 2 && x != 3) x -= (level + 1) - x;
-            if (level == 2 && y != 3) y -= (level + 1) - y;
-            if (level == 2 && z != 3) z -= (level + 1) - z;
+            if (level == 5 && x != 31) x -= 31 - x;
+            if (level == 5 && y != 31) y -= 31 - y;
+            if (level == 5 && z != 31) z -= 31 - z;// 15 + 16 = 31
 
-            if (level == 1 && x != 1) x -= (level + 0) - x;
-            if (level == 1 && y != 1) y -= (level + 0) - y;
-            if (level == 1 && z != 1) z -= (level + 0) - z;
+            if (level == 4 && x != 15) x -= 15 - x;
+            if (level == 4 && y != 15) y -= 15 - y;
+            if (level == 4 && z != 15) z -= 15 - z;// 7 + 8 = 15
+
+            if (level == 3 && x != 7) x -= 7 - x;
+            if (level == 3 && y != 7) y -= 7 - y;
+            if (level == 3 && z != 7) z -= 7 - z;// 3 + 4 = 7
+
+            if (level == 2 && x != 3) x -= 3 - x;
+            if (level == 2 && y != 3) y -= 3 - y;
+            if (level == 2 && z != 3) z -= 3 - z;// 1 + 2 = 3
+
+            if (level == 1 && x != 1) x -= 1 - x;
+            if (level == 1 && y != 1) y -= 1 - y;
+            if (level == 1 && z != 1) z -= 1 - z;// root = 0
         }
 
         Vector3 boxPos = new(x * 0.5f, y * 0.5f, z * 0.5f);

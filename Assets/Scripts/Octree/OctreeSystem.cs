@@ -12,7 +12,7 @@ public class OctreeSystem : MonoBehaviour
 {
     //インスペクター =====================================================
     [Header("Octree Param")]
-    [SerializeField][Range(0, 4)] private int m_level = 1;
+    [SerializeField][Range(0, 6)] private int m_level = 1;
     [SerializeField] private Vector3 m_areaMin = new(-10, -10, -10);
     [SerializeField] private Vector3 m_areaMax = new( 10,  10,  10);
 
@@ -48,23 +48,6 @@ public class OctreeSystem : MonoBehaviour
     /// <summary>ビューアーとしても最低限提供</summary>
     private void OnDrawGizmos()
     {
-        if (Application.isPlaying)
-        {
-            foreach(var b in test)
-            {
-                var bounds = b.GetComponent<Collider>().bounds;
-                Vector3 min = bounds.min;
-                Vector3 max = bounds.max;
-                m_linearTreeManager.OffsetPosition(ref min, ref max);
-                m_mortonNumber = m_linearTreeManager.GetMortonNumber(min, max, out m_belongLevel);
-                m_mortonNumber = m_linearTreeManager.ToLinearSpace(m_mortonNumber, m_belongLevel);
-
-                var aabb = m_linearTreeManager.GetBoundsFromMortonNumber(m_mortonNumber);
-                Gizmos.color = Color.yellow;
-                Gizmos.DrawWireCube(aabb.center, aabb.size);
-            }
-        }
-
         // 分割が最大の場合を可視化
         if (m_viewMaxCells)
         {
@@ -112,6 +95,23 @@ public class OctreeSystem : MonoBehaviour
                         Gizmos.DrawLine(from, to);
                     }
                 }
+            }
+        }
+
+        if (Application.isPlaying)
+        {
+            foreach (var b in test)
+            {
+                var bounds = b.GetComponent<Collider>().bounds;
+                Vector3 min = bounds.min;
+                Vector3 max = bounds.max;
+                m_linearTreeManager.OffsetPosition(ref min, ref max);
+                m_mortonNumber = m_linearTreeManager.GetMortonNumber(min, max, out m_belongLevel);
+                m_mortonNumber = m_linearTreeManager.ToLinearSpace(m_mortonNumber, m_belongLevel);
+
+                var aabb = m_linearTreeManager.GetBoundsFromMortonNumber(m_mortonNumber);
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawWireCube(aabb.center, aabb.size);
             }
         }
     }
