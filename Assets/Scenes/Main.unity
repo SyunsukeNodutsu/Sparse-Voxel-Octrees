@@ -262,7 +262,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08dc77b9ccb104b4b99a18601d2cc187, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_level: 5
+  m_level: 6
   m_areaMin: {x: -22, y: -22, z: -22}
   m_areaMax: {x: 22, y: 22, z: 22}
   m_viewMaxCells: 0
