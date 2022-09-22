@@ -25,7 +25,7 @@ public class OctreeSystem : MonoBehaviour
     [NonSerialized] public List<GameObject> test = new();
 
     private LinearTreeManager<GameObject> m_linearTreeManager;
-    private readonly List<GameObject> m_collisionList = new();
+    private List<GameObject> m_collisionList;
 
     //関数群 =============================================================
     private void Awake()
@@ -33,16 +33,18 @@ public class OctreeSystem : MonoBehaviour
         m_linearTreeManager = new LinearTreeManager<GameObject>();
         if (!m_linearTreeManager.Initialize(m_level, m_areaMin, m_areaMax))
             Debug.LogError("線分8分木空間の生成失敗.");
+
+        m_collisionList = new List<GameObject>(m_linearTreeManager.GetCellNum());
     }
 
     private void Update()
     {
-        /*if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
+            m_collisionList.Clear();
             m_linearTreeManager.GetCellRegisterList(0, m_collisionList);
             Debug.Log("m_collisionList.Count: " + m_collisionList.Count);
-            m_collisionList.Clear();
-        }*/
+        }
     }
 
     /// <summary>ビューアーとしても最低限提供</summary>

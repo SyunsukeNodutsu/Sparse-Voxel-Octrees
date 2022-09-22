@@ -21,6 +21,8 @@ public class LinearTreeManager<T>
     private int m_cellNum = 0;// 分割されたセル数の最大値
     private int m_parentShift;
 
+    public int GetCellNum() { return m_cellNum; }
+
     /// <summary>初期化</summary>
     /// <param name="level">分割レベル</param>
     /// <returns>成功したかどうか</returns>
@@ -50,8 +52,7 @@ public class LinearTreeManager<T>
     }
 
     /// <summary>指定の空間番号に所属するTのリストを返す</summary>
-    /// TODO: OutOfMemoryException: Out of memory
-    public bool GetCellRegisterList(int elem, List<T> collisionList)
+    public int GetCellRegisterList(int elem, List<T> collisionList)
     {
         // ルート空間に登録されているリンクリストの最初の要素を取り出す
         TreeData<T> data = m_cellList[elem].FirstData;
@@ -59,33 +60,21 @@ public class LinearTreeManager<T>
         // データがなくなるまで繰り返す
         while (data != null)
         {
-            // まず、リンクリストの次を取り出す
-            TreeData<T> next = data.Next;
-            while (next != null)
-            {
-                // 衝突リスト作成
-                collisionList.Add(data.Object);
-                next = next.Next;
-            }
-
+            collisionList.Add(data.Object);
             data = data.Next;
         }
 
-        // 小空間を巡る
+        // 子空間に移動
         for (int i = 0; i < 8; i++)
         {
-            int nextElem = elem * 8 + 1 + i;
+            int nextIndex = elem * 8 + 1 + i;
+            if (nextIndex >= m_cellNum || m_cellList[nextIndex] == null)
+                continue;
 
-            // 空間分割数以上 or 対象空間がない場合はスキップ
-            bool needsSkip = (nextElem >= m_cellNum ||
-                             m_cellList[nextElem] == null);
-            if (needsSkip) continue;
-
-            // 子空間を検索
-            GetCellRegisterList(nextElem, collisionList);
+            GetCellRegisterList(nextIndex, collisionList);
         }
 
-        return true;
+        return collisionList.Count;
     }
 
     /// <summary>モートン番号からBoundsを計算して返す</summary>
@@ -173,8 +162,7 @@ public class LinearTreeManager<T>
         if (!OffsetPosition(ref min, ref max)) return false;
 
         // オブジェクトの境界範囲からモートン番号を算出
-        int belongLevel;
-        int elem = GetMortonNumber(min, max, out belongLevel);
+        int elem = GetMortonNumber(min, max, out int belongLevel);
         elem = ToLinearSpace(elem, belongLevel);
 
         // 算出されたモートン番号が、生成した空間分割数より大きい場合はエラー

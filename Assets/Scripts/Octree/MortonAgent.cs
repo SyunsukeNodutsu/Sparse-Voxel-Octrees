@@ -56,7 +56,8 @@ public class MortonAgent : MonoBehaviour
 
     private void RegisterUpdate()
     {
-        m_manager.Register(Bounds.min, Bounds.max, TreeData);
+        //m_manager.Register(Bounds.min, Bounds.max, TreeData);
+        m_manager.Register(transform.position, transform.position, TreeData);
     }
 
 }
