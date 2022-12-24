@@ -33,11 +33,10 @@ public class Boid : MonoBehaviour
         // それかそもそもBoid単位に制限をかける？
         var cameraPos = Camera.main.transform.position;
         var distance = Vector3.Distance(cameraPos, Position);
-        if (distance >= 100.0f) { Debug.Log("カメラとの距離が離れすぎているので処理を飛ばします."); return; }
+        if (distance >= BoidParam.stopDistance) { Debug.Log("カメラとの距離が離れすぎているので処理を飛ばします."); return; }
         
-        UpdateNeighbors();
         UpdateWalls();
-        UpdateAccel();
+        UpdateNeighbors();
         UpdateMove();
     }
 
@@ -59,11 +58,12 @@ public class Boid : MonoBehaviour
         Position += Velocity * Time.deltaTime;
 
         // BOX外の場合は補正
+        // ここの処理が入った場合、ENVの方にパラメータを見直してもらいたいのでLogを出す
         {
             var distance = Vector3.Distance(Position, BoidSystem.transform.position);
             if (distance >= 24.0f)// TODO: システムから取得
             {
-                Debug.Log("Box外 復帰処理を行います.");
+                Debug.Log("遊泳エリア外 復帰処理を行います パラメータの見直しを推奨.");
                 var newDir = BoidSystem.transform.position - Position;
                 Velocity = Mathf.Clamp(speed, BoidParam.minSpeed, BoidParam.maxSpeed) * newDir * 0.8f;
             }
@@ -97,15 +97,18 @@ public class Boid : MonoBehaviour
             CalcAccelAgainstWall(+scale - Position.z, Vector3.back);
     }
 
-    /// <summary>群れの形成</summary>
+    /// <summary>群れの形成分離.整列.結合の3要素を計算</summary>
     void UpdateNeighbors()
     {
-        m_neighborList.Clear();
-
         if (!BoidSystem) return;
+        if (BoidSystem.BoidList.Count <= 0) return;
 
-        var prodThresh = Mathf.Cos(BoidParam.neighborFov * Mathf.Deg2Rad);
-        var distThresh = BoidParam.neighborDistance;
+        Vector3 separation = Vector3.zero;
+        Vector3 alignment = Vector3.zero;
+        Vector3 cohesion = Vector3.zero;
+
+        // 要素で分離してもいいかも 例) separationは視界の判定を行わない
+        int numNeighbors = 0;
 
         foreach (var other in BoidSystem.BoidList)
         {
@@ -113,43 +116,36 @@ public class Boid : MonoBehaviour
 
             var to = other.Position - Position;
             var dist = to.magnitude;
-            if (dist < distThresh)
+            if (dist < BoidParam.neighborDistance)
             {
                 var dir = to.normalized;
                 var fwd = Velocity.normalized;
                 var prod = Vector3.Dot(fwd, dir);
-                if (prod > prodThresh)
-                    m_neighborList.Add(other);
+                if (prod > Mathf.Cos(BoidParam.neighborFov * Mathf.Deg2Rad))
+                {
+                    // 群れと判断
+                    separation += (Position - other.Position).normalized;
+                    alignment += other.Velocity;
+                    cohesion += other.Position;
+                    numNeighbors++;
+                }
             }
         }
-    }
 
-    /// <summary>分離.整列.結合の3要素を計算</summary>
-    void UpdateAccel()
-    {
-        if (m_neighborList.Count == 0) return;
-
-        Vector3 separation = Vector3.zero;
-        Vector3 alignment = Vector3.zero;
-        Vector3 cohesion = Vector3.zero;
-        foreach (var neighbor in m_neighborList)
-        {
-            separation += (Position - neighbor.Position).normalized;
-            alignment += neighbor.Velocity;
-            cohesion += neighbor.Position;
-        }
-
-        // 平均値計算
-        separation /= m_neighborList.Count;
-        alignment /= m_neighborList.Count;
-        cohesion /= m_neighborList.Count;
+        // 単独の場合はアクセル値の計算を行わない
+        // TODO: ネイバーリストが形成されない場合、壁との反発で更新されたVelocityが原因で
+        // 異様に早くなってしまう ->単体の場合はVelocityに制限をかけたほうがいい？
+        if (numNeighbors <= 0) return;
 
         // アクセル値計算
+        separation /= numNeighbors;
         m_accel += separation * BoidParam.separationWeight;
-        m_accel += (alignment - Velocity) * BoidParam.alignmentWeight;
-        m_accel += (cohesion - Position) * BoidParam.cohesionWeight;
 
-        // ここでX回転の制限するとネイバーリストが0の際に処理が走らない
+        alignment /= numNeighbors;
+        m_accel += (alignment - Velocity) * BoidParam.alignmentWeight;
+
+        cohesion /= numNeighbors;
+        m_accel += (cohesion - Position) * BoidParam.cohesionWeight;
     }
 
 }

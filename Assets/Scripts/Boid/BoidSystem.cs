@@ -2,10 +2,6 @@
 // File: BoidSystem.cs
 //
 // Boidの管理
-// TODO：
-// ・Box外に出た際に復帰する処理をかく
-// ・Octreeから魚群を作成 オーダー数の改善
-// ・魚のZ軸回転をさせない or 船みたいに戻し処理入れる
 //-----------------------------------------------------------------------------
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -51,7 +47,7 @@ public class BoidSystem : MonoBehaviour
             if (m_octree)
             {
                 m_octree.RegisterObject(instance);
-                m_octree.test.Add(instance);// TODO: とりあえずデモ使用
+                m_octree.test.Add(instance);// TODO: テスト中
             }
         }
     }

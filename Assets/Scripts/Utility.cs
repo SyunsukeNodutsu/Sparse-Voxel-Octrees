@@ -1,20 +1,20 @@
-//-----------------------------------------------------------------------------
+ï»¿//-----------------------------------------------------------------------------
 // File: Utility.cs
 //
-// •Ö—˜‹@”\‚Ü‚Æ‚ß
+// ä¾¿åˆ©æ©Ÿèƒ½ã¾ã¨ã‚
 //-----------------------------------------------------------------------------
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-/// <summary>•Ö—˜‹@”\‚Ü‚Æ‚ßƒNƒ‰ƒX</summary>
+/// <summary>ä¾¿åˆ©æ©Ÿèƒ½ã¾ã¨ã‚ã‚¯ãƒ©ã‚¹</summary>
 public static class Utility
 {
-    /// <summary>float‚ğmin`max‚ÌŠÔ‚Å³‹K‰»(üŒ`•âŠ®)</summary>
-    /// <param name="val">İ’è‘ÎÛ‚Ì’l</param>
-    /// <param name="min">Å¬’l</param>
-    /// <param name="max">Å‘å’l</param>
+    /// <summary>floatã‚’minï½maxã®é–“ã§æ­£è¦åŒ–(ç·šå½¢è£œå®Œ)</summary>
+    /// <param name="val">è¨­å®šå¯¾è±¡ã®å€¤</param>
+    /// <param name="min">æœ€å°å€¤</param>
+    /// <param name="max">æœ€å¤§å€¤</param>
     /// <returns></returns>
     public static float GetNormalizeVal(float val, float min, float max)
     {
@@ -24,20 +24,20 @@ public static class Utility
         return 0;
     }
 
-    /// <summary>Å‘å’l‚ğ"1"Å¬’l‚ğ"0"‚É³‹K‰»‚µ•Ô‚·</summary>
-    /// <param name="t">³‹K‰»‚·‚é’l</param>
-    /// /// <returns>³‹K‰»‚³‚ê‚½Œ‹‰Ê</returns>
+    /// <summary>æœ€å¤§å€¤ã‚’"1"æœ€å°å€¤ã‚’"0"ã«æ­£è¦åŒ–ã—è¿”ã™</summary>
+    /// <param name="t">æ­£è¦åŒ–ã™ã‚‹å€¤</param>
+    /// /// <returns>æ­£è¦åŒ–ã•ã‚ŒãŸçµæœ</returns>
     public static float GetZeroOneLinear(float min, float max, float t) { return (t - min) / (max - min); }
 
-    /// <summary>"min"`"max"‚Ì’l‚ğ"newMin"`"newMax"‚Ì’l‚É³‹K‰»‚µ•Ô‚·</summary>
-    /// <param name="t">³‹K‰»‚·‚é’l</param>
-    /// <returns>³‹K‰»‚³‚ê‚½Œ‹‰Ê</returns>
+    /// <summary>"min"ï½"max"ã®å€¤ã‚’"newMin"ï½"newMax"ã®å€¤ã«æ­£è¦åŒ–ã—è¿”ã™</summary>
+    /// <param name="t">æ­£è¦åŒ–ã™ã‚‹å€¤</param>
+    /// <returns>æ­£è¦åŒ–ã•ã‚ŒãŸçµæœ</returns>
     public static float GetZeroOneLinearEx(float min, float max, float newMin, float newMax, float t) { return (t - min) / (max - min) * (newMax - newMin) + newMin; }
 
-    /// <summary>XZ•½–Ê‚Å‚Ì‹——£‚ğ•Ô‚·</summary>
-    /// <param name="a">À•WA</param>
-    /// <param name="b">À•WB</param>
-    /// <returns>‹——£</returns>
+    /// <summary>XZå¹³é¢ã§ã®è·é›¢ã‚’è¿”ã™</summary>
+    /// <param name="a">åº§æ¨™A</param>
+    /// <param name="b">åº§æ¨™B</param>
+    /// <returns>è·é›¢</returns>
     public static float DistanceXZ(Vector3 a, Vector3 b)
     {
         float num = a.x - b.x;
@@ -45,19 +45,19 @@ public static class Utility
         return Mathf.Sqrt(num * num + num2 * num2);
     }
 
-    /// <summary>Image‚Ì•s“§–¾“x‚ğİ’è‚·‚é</summary>
-    /// <param name="image">İ’è‘ÎÛ‚ÌImageƒRƒ“ƒ|[ƒlƒ“ƒg</param>
-    /// <param name="alpha">•s“§–¾“x(0`1)</param>
+    /// <summary>Imageã®ä¸é€æ˜åº¦ã‚’è¨­å®šã™ã‚‹</summary>
+    /// <param name="image">è¨­å®šå¯¾è±¡ã®Imageã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ</param>
+    /// <param name="alpha">ä¸é€æ˜åº¦(0ï½1)</param>
     public static void SetOpacity(Image image, float alpha)
     {
         var c = image.color;
         image.color = new Color(c.r, c.g, c.b, alpha);
     }
 
-    /// <summary>ƒJƒƒ‰(main)‚©‚ç‰æ–Ê’†‰›‚ÉRay‚ğ”ò‚Î‚µÕ“ËÀ•W‚ğŠi”[</summary>
-    /// <param name="ignoreDistance">Ray‚ğ–³‹‚·‚éƒJƒƒ‰‚©‚ç‚Ì‹——£</param>
-    /// <param name="retPos">Ši”[‚³‚ê‚éÕ“ËÀ•W</param>
-    /// <returns>Õ“Ë‚µ‚½‚©‚Ç‚¤‚©</returns>
+    /// <summary>ã‚«ãƒ¡ãƒ©(main)ã‹ã‚‰ç”»é¢ä¸­å¤®ã«Rayã‚’é£›ã°ã—è¡çªåº§æ¨™ã‚’æ ¼ç´</summary>
+    /// <param name="ignoreDistance">Rayã‚’ç„¡è¦–ã™ã‚‹ã‚«ãƒ¡ãƒ©ã‹ã‚‰ã®è·é›¢</param>
+    /// <param name="retPos">æ ¼ç´ã•ã‚Œã‚‹è¡çªåº§æ¨™</param>
+    /// <returns>è¡çªã—ãŸã‹ã©ã†ã‹</returns>
     public static bool GetCameraRayPoint(float ignoreDistance, out Vector3 retPos)
     {
         var cameraPos = Camera.main.transform.position;
@@ -76,7 +76,7 @@ public static class Utility
             if (hitDistance < ignoreDistance)
                 continue;
 
-            //ˆê”Ô‹ß‚¢Object‚ğ—Dæ
+            // ä¸€ç•ªè¿‘ã„Objectã‚’å„ªå…ˆ
             if (hitDistance < distance)
             {
                 tmpPos = hit.point;
@@ -90,16 +90,16 @@ public static class Utility
         return checkOnceHit;
     }
 
-    /// <summary>‰¹—ÊƒtƒF[ƒh‚ğİ’è</summary>
-    /// <note>“à•”“I‚ÉSetVolume‚ª‚Ç‚¤“®‚¢‚Ä‚¢‚éH ->¬‚³‚¢•Ï‰»—Ê‚Í”ò‚Î‚³‚È‚¢‚Æd‚­‚È‚é</note>
-    /// <param name="targetVolume">–Ú•W‰¹—Ê</param>
-    /// <param name="fadeTime">ƒtƒF[ƒh‚É‚©‚©‚éŠÔ</param>
+    /// <summary>éŸ³é‡ãƒ•ã‚§ãƒ¼ãƒ‰ã‚’è¨­å®š</summary>
+    /// <note>å†…éƒ¨çš„ã«SetVolumeãŒã©ã†å‹•ã„ã¦ã„ã‚‹ï¼Ÿ ->å°ã•ã„å¤‰åŒ–é‡ã¯é£›ã°ã•ãªã„ã¨é‡ããªã‚‹</note>
+    /// <param name="targetVolume">ç›®æ¨™éŸ³é‡</param>
+    /// <param name="fadeTime">ãƒ•ã‚§ãƒ¼ãƒ‰ã«ã‹ã‹ã‚‹æ™‚é–“</param>
     public static IEnumerator SetFade(float targetVolume, float fadeTime)
     {
         float startVolume = AudioListener.volume;
         float timeCount = 0.0f;
 
-        //ŠÔ‚²‚Æ‚Ì•Ï‰»—Ê
+        // æ™‚é–“ã”ã¨ã®å¤‰åŒ–é‡
         float fadeVolume = (targetVolume - startVolume) / fadeTime;
 
         while (timeCount <= fadeTime)
@@ -112,17 +112,17 @@ public static class Utility
         AudioListener.volume = targetVolume;
     }
 
-    /// <summary>‰¹—ÊƒtƒF[ƒh‚ğİ’è</summary>
-    /// <note>“à•”“I‚ÉSetVolume‚ª‚Ç‚¤“®‚¢‚Ä‚¢‚éH ->¬‚³‚¢•Ï‰»—Ê‚Í”ò‚Î‚³‚È‚¢‚Æd‚­‚È‚é</note>
-    /// <param name="source">ƒtƒF[ƒh‚³‚¹‚éƒI[ƒfƒBƒIƒ\[ƒX</param>
-    /// <param name="targetVolume">–Ú•W‰¹—Ê</param>
-    /// <param name="fadeTime">ƒtƒF[ƒh‚É‚©‚©‚éŠÔ</param>
+    /// <summary>éŸ³é‡ãƒ•ã‚§ãƒ¼ãƒ‰ã‚’è¨­å®š</summary>
+    /// <note>å†…éƒ¨çš„ã«SetVolumeãŒã©ã†å‹•ã„ã¦ã„ã‚‹ï¼Ÿ ->å°ã•ã„å¤‰åŒ–é‡ã¯é£›ã°ã•ãªã„ã¨é‡ããªã‚‹</note>
+    /// <param name="source">ãƒ•ã‚§ãƒ¼ãƒ‰ã•ã›ã‚‹ã‚ªãƒ¼ãƒ‡ã‚£ã‚ªã‚½ãƒ¼ã‚¹</param>
+    /// <param name="targetVolume">ç›®æ¨™éŸ³é‡</param>
+    /// <param name="fadeTime">ãƒ•ã‚§ãƒ¼ãƒ‰ã«ã‹ã‹ã‚‹æ™‚é–“</param>
     public static IEnumerator SetFade(AudioSource source, float targetVolume, float fadeTime)
     {
         float startVolume = source.volume;
         float timeCount = 0.0f;
 
-        //ŠÔ‚²‚Æ‚Ì•Ï‰»—Ê
+        // æ™‚é–“ã”ã¨ã®å¤‰åŒ–é‡
         float fadeVolume = (targetVolume - startVolume) / fadeTime;
 
         while (timeCount <= fadeTime)
@@ -136,8 +136,8 @@ public static class Utility
     }
 
 #if UNITY_EDITOR
-    /// <summary>UnityEditor ƒRƒ“ƒ\[ƒ‹ƒƒO‚ÌƒNƒŠƒA</summary>
-    /// <note>’ˆÓ.Releaseƒrƒ‹ƒh‚ÌÛ‚ÍœŠO‚·‚é•K—v‚ª‚ ‚é</note>
+    /// <summary>UnityEditor ã‚³ãƒ³ã‚½ãƒ¼ãƒ«ãƒ­ã‚°ã®ã‚¯ãƒªã‚¢</summary>
+    /// <note>æ³¨æ„.Releaseãƒ“ãƒ«ãƒ‰ã®éš›ã¯é™¤å¤–ã™ã‚‹å¿…è¦ãŒã‚ã‚‹</note>
     public static void ClearLog()
     {
         var assembly = System.Reflection.Assembly.GetAssembly(typeof(UnityEditor.Editor));
@@ -151,44 +151,44 @@ public static class Utility
 
 }
 
-/// <summary>ƒeƒŒƒCƒ“ŠÖ˜A‚Ì•Ö—˜‹@”\</summary>
+/// <summary>ãƒ†ãƒ¬ã‚¤ãƒ³é–¢é€£ã®ä¾¿åˆ©æ©Ÿèƒ½</summary>
 public static class TerrainUtility
 {
-    /// <summary>ƒAƒ‹ƒtƒ@ƒ}ƒbƒv‚Ìƒf[ƒ^</summary>
+    /// <summary>ã‚¢ãƒ«ãƒ•ã‚¡ãƒãƒƒãƒ—ã®ãƒ‡ãƒ¼ã‚¿</summary>
     public class AlphamapsData
     {
-        /// <summary>ƒeƒNƒXƒ`ƒƒƒŒƒCƒ„[‚Ì–¼‘O</summary>
+        /// <summary>ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åå‰</summary>
         public string layerName;
-        /// <summary>ƒyƒCƒ“ƒg‚ÌŠ„‡</summary>
+        /// <summary>ãƒšã‚¤ãƒ³ãƒˆã®å‰²åˆ</summary>
         public float element;
     }
 
-    /// <summary>TerrainData‚©‚çƒAƒ‹ƒtƒ@ƒ}ƒbƒvƒf[ƒ^‚ğæ“¾‚µ•Ô‚·</summary>
-    /// <param name="terrainData">‰ğÍ‚·‚éƒeƒŒƒCƒ“ƒf[ƒ^</param>
-    /// <param name="hitInfo">ƒŒƒC‚ÌŒ‹‰Êî•ñ</param>
-    /// <param name="sizeX">æ“¾‚·‚é• (Default: 1)</param>
-    /// <param name="sizeY">æ“¾‚·‚é‚‚³ (Default: 1)</param>
-    /// <returns>ƒAƒ‹ƒtƒ@ƒ}ƒbƒv‚Ìƒf[ƒ^</returns>
+    /// <summary>TerrainDataã‹ã‚‰ã‚¢ãƒ«ãƒ•ã‚¡ãƒãƒƒãƒ—ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—ã—è¿”ã™</summary>
+    /// <param name="terrainData">è§£æã™ã‚‹ãƒ†ãƒ¬ã‚¤ãƒ³ãƒ‡ãƒ¼ã‚¿</param>
+    /// <param name="hitInfo">ãƒ¬ã‚¤ã®çµæœæƒ…å ±</param>
+    /// <param name="sizeX">å–å¾—ã™ã‚‹å¹… (Default: 1)</param>
+    /// <param name="sizeY">å–å¾—ã™ã‚‹é«˜ã• (Default: 1)</param>
+    /// <returns>ã‚¢ãƒ«ãƒ•ã‚¡ãƒãƒƒãƒ—ã®ãƒ‡ãƒ¼ã‚¿</returns>
     public static List<AlphamapsData> GetAlphamapsDataListFromRay(TerrainData terrainData, RaycastHit hitInfo, int sizeX = 1, int sizeY = 1)
     {
         List<AlphamapsData> alphamapsDataList = new();
 
-        //“Ç‚İ‚ŞÀ•W
+        // èª­ã¿è¾¼ã‚€åº§æ¨™
         int posX = Mathf.FloorToInt(hitInfo.textureCoord.x * terrainData.alphamapWidth);
         int posY = Mathf.FloorToInt(hitInfo.textureCoord.y * terrainData.alphamapHeight);
 
-        //ƒAƒ‹ƒtƒ@ƒ}ƒbƒv‚ğæ“¾
+        // ã‚¢ãƒ«ãƒ•ã‚¡ãƒãƒƒãƒ—ã‚’å–å¾—
         var alphamaps = terrainData.GetAlphamaps(posX, posY, sizeX, sizeY);
-        //ƒAƒ‹ƒtƒ@ƒ}ƒbƒv‚Ì”
+        // ã‚¢ãƒ«ãƒ•ã‚¡ãƒãƒƒãƒ—ã®æ•°
         int numMaps = terrainData.alphamapLayers;
 
         for (int i = 0; i < numMaps; i++)
         {
-            //ƒyƒCƒ“ƒg‚ÌŠ„‡(‡Œv1)‚ğŠm”F‚µ “h‚ç‚ê‚Ä‚¢‚éƒŒƒCƒ„[‚Ì‚İ’Ç‰Á
+            // ãƒšã‚¤ãƒ³ãƒˆã®å‰²åˆ(åˆè¨ˆ1)ã‚’ç¢ºèªã— å¡—ã‚‰ã‚Œã¦ã„ã‚‹ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã¿è¿½åŠ 
             float element = alphamaps[0, 0, i];
             if (element <= 0) continue;
 
-            //ƒAƒ‹ƒtƒ@ƒ}ƒbƒv‚Ì•K—v‚Èƒf[ƒ^‚ğ’Šo‚µ ƒŠƒXƒg‚É’Ç‰Á
+            // ã‚¢ãƒ«ãƒ•ã‚¡ãƒãƒƒãƒ—ã®å¿…è¦ãªãƒ‡ãƒ¼ã‚¿ã‚’æŠ½å‡ºã— ãƒªã‚¹ãƒˆã«è¿½åŠ 
             var alphamapsData = new AlphamapsData
             {
                 layerName = terrainData.terrainLayers[i].name,
@@ -200,6 +200,6 @@ public static class TerrainUtility
         return alphamapsDataList;
     }
 
-    //TODO: Š„‡‚ªˆê”Ô‘½‚¢ƒŒƒCƒ„[‚ğ•Ô‚·
+    // TODO: å‰²åˆãŒä¸€ç•ªå¤šã„ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’è¿”ã™
 
 }

@@ -229,7 +229,7 @@ GameObject:
   - component: {fileID: 466225929}
   - component: {fileID: 466225930}
   m_Layer: 0
-  m_Name: OctreeSystem
+  m_Name: OctreeBoidsSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

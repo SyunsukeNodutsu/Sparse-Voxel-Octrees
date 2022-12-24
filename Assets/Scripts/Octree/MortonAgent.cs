@@ -1,9 +1,8 @@
 ﻿//-----------------------------------------------------------------------------
-// File: OctreeSystem.cs
+// File: MortonAgent.cs
 //
-// アプリサイドで使用する汎用的な分割空間システム
+// 分木登録エージェント
 //-----------------------------------------------------------------------------
-using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 public class MortonAgent : MonoBehaviour

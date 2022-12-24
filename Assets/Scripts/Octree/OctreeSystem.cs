@@ -18,6 +18,7 @@ public class OctreeSystem : MonoBehaviour
 
     [Header("Debug Param")]
     [SerializeField] private bool m_viewMaxCells = false;
+    [SerializeField] private bool m_viewBoidBounds = false;
     [SerializeField] private int m_mortonNumber = 0;
     [SerializeField] private int m_belongLevel = 0;
 
@@ -107,7 +108,7 @@ public class OctreeSystem : MonoBehaviour
             }
         }
 
-        if (Application.isPlaying)
+        if (Application.isPlaying && m_viewBoidBounds)
         {
             foreach (var b in test)
             {
