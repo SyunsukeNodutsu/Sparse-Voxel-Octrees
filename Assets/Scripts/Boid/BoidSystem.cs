@@ -2,6 +2,10 @@
 // File: BoidSystem.cs
 //
 // Boidの管理
+// TODO：
+// ・Box外に出た際に復帰する処理をかく
+// ・Octreeから魚群を作成 オーダー数の改善
+// ・魚のZ軸回転をさせない or 船みたいに戻し処理入れる
 //-----------------------------------------------------------------------------
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,13 +22,10 @@ public class BoidSystem : MonoBehaviour
     private readonly List<Boid> m_boidList = new();
     public ReadOnlyCollection<Boid> BoidList { get { return m_boidList.AsReadOnly(); } }
 
-    private void Update()
+    private void Start()
     {
-        while (m_boidList.Count < m_boidCount)
-            AddBoid();
-
-        while (m_boidList.Count > m_boidCount)
-            RemoveBoid();
+        for (int i = 0; i < m_boidCount; i++)
+            AddBoid(i);
     }
 
     void OnDrawGizmos()
@@ -34,10 +35,11 @@ public class BoidSystem : MonoBehaviour
         Gizmos.DrawWireCube(Vector3.zero, Vector3.one * m_param.wallScale);
     }
 
-    void AddBoid()
+    void AddBoid(int index)
     {
         var instance = Instantiate(m_boidPrefab, Random.insideUnitSphere, Random.rotation);
         instance.transform.SetParent(transform);
+        instance.name = "Boid_" + index.ToString();
 
         var boid = instance.GetComponent<Boid>();
         if (boid)
@@ -52,17 +54,6 @@ public class BoidSystem : MonoBehaviour
                 m_octree.test.Add(instance);// TODO: とりあえずデモ使用
             }
         }
-    }
-
-    void RemoveBoid()
-    {
-        if (m_boidList.Count == 0) return;
-
-        var lastIndex = m_boidList.Count - 1;
-        var boid = m_boidList[lastIndex];
-
-        Destroy(boid.gameObject);
-        m_boidList.RemoveAt(lastIndex);
     }
 
 }

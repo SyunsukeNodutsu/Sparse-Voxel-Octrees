@@ -262,7 +262,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08dc77b9ccb104b4b99a18601d2cc187, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_level: 6
+  m_level: 3
   m_areaMin: {x: -22, y: -22, z: -22}
   m_areaMax: {x: 22, y: 22, z: 22}
   m_viewMaxCells: 0
@@ -283,7 +283,7 @@ MonoBehaviour:
   m_boidPrefab: {fileID: 6480857069364921560, guid: c190352d1fcace8438b721fca920c6b6, type: 3}
   m_octree: {fileID: 466225929}
   m_param: {fileID: 11400000, guid: c9cb24ff6c229a747b6385f85a291c8b, type: 2}
-  m_boidCount: 10
+  m_boidCount: 100
 --- !u!1 &1989975626
 GameObject:
   m_ObjectHideFlags: 0

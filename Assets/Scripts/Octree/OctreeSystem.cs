@@ -44,6 +44,13 @@ public class OctreeSystem : MonoBehaviour
             m_collisionList.Clear();
             m_linearTreeManager.GetCellRegisterList(0, m_collisionList);
             Debug.Log("m_collisionList.Count: " + m_collisionList.Count);
+
+            int i = 0;
+            foreach (var col in m_collisionList)
+            {
+                Debug.Log("[" + i + "]name: " + col.name);
+                i++;
+            }
         }
     }
 

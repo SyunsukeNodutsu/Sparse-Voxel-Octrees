@@ -3,8 +3,10 @@
 //
 // Boid単位
 //-----------------------------------------------------------------------------
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 /// <summary>Boid単位</summary>
 public class Boid : MonoBehaviour
@@ -26,6 +28,13 @@ public class Boid : MonoBehaviour
 
     private void Update()
     {
+        // カメラから離れすぎていれば処理をしない
+        // Boxがでかすぎる場合に考慮してBoxの面との距離を算出したほうがいい？
+        // それかそもそもBoid単位に制限をかける？
+        var cameraPos = Camera.main.transform.position;
+        var distance = Vector3.Distance(cameraPos, Position);
+        if (distance >= 100.0f) { Debug.Log("カメラとの距離が離れすぎているので処理を飛ばします."); return; }
+        
         UpdateNeighbors();
         UpdateWalls();
         UpdateAccel();
@@ -37,11 +46,28 @@ public class Boid : MonoBehaviour
     {
         Velocity += m_accel * Time.deltaTime;
 
+        // X回転(Y移動量)制限
+        {
+            var newY = Mathf.Clamp(Velocity.y, -BoidParam.clampVelocityY, BoidParam.clampVelocityY);
+            Velocity = new Vector3(Velocity.x, newY, Velocity.z);
+        }
+
         var dir = Velocity.normalized;
         var speed = Velocity.magnitude;
         Velocity = Mathf.Clamp(speed, BoidParam.minSpeed, BoidParam.maxSpeed) * dir;
 
         Position += Velocity * Time.deltaTime;
+
+        // BOX外の場合は補正
+        {
+            var distance = Vector3.Distance(Position, BoidSystem.transform.position);
+            if (distance >= 24.0f)// TODO: システムから取得
+            {
+                Debug.Log("Box外 復帰処理を行います.");
+                var newDir = BoidSystem.transform.position - Position;
+                Velocity = Mathf.Clamp(speed, BoidParam.minSpeed, BoidParam.maxSpeed) * newDir * 0.8f;
+            }
+        }
 
         var rot = Quaternion.LookRotation(Velocity);
         transform.SetPositionAndRotation(Position, rot);
@@ -122,6 +148,8 @@ public class Boid : MonoBehaviour
         m_accel += separation * BoidParam.separationWeight;
         m_accel += (alignment - Velocity) * BoidParam.alignmentWeight;
         m_accel += (cohesion - Position) * BoidParam.cohesionWeight;
+
+        // ここでX回転の制限するとネイバーリストが0の際に処理が走らない
     }
 
 }

@@ -97,7 +97,7 @@ public class LinearTreeManager<T>
         for (int i = level; i > 0; i--) s |= (number >> (3 * i - 0 - i) & (1 << i - 1));
         int z = s;
 
-        // (level,level,level)を(0,0,0)基準に
+        // 0 -> level/2
         int num = (int)Mathf.Pow(2, level) - 1;
         if (x != num) x -= num - x;
         if (y != num) y -= num - y;
