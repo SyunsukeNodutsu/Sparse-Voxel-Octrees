@@ -15,10 +15,11 @@ public class BoidParam : ScriptableObject
     public float neighborFov = 90.0f;       // 群れを形成しようとする角度
     public float wallScale = 5.0f;
     public float wallDistance = 3.0f;
+    public float returnDistance = 3.0f;
     public float wallWeight = 1.0f;
     public float separationWeight = 5.0f;   // 分離
     public float alignmentWeight = 2.0f;    // 整列
     public float cohesionWeight = 3.0f;     // 結合
-    public float clampVelocityY = 0.2f;     // VelocityY制限
+    public float clampVelocityY = 0.2f;     // VelocityY制限 TODO: わかりにくいのでdegreeで設定させたい
     public float stopDistance = 100.0f;     // 処理を停止する距離
 }

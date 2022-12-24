@@ -13,15 +13,16 @@ MonoBehaviour:
   m_Name: BoidParam
   m_EditorClassIdentifier: Assembly-CSharp::Param
   initSpeed: 4
-  minSpeed: 4
-  maxSpeed: 8
+  minSpeed: 2
+  maxSpeed: 6
   neighborDistance: 3
   neighborFov: 64
   wallScale: 40
-  wallDistance: 5
+  wallDistance: 10
+  returnDistance: 25
   wallWeight: 1
-  separationWeight: 6
+  separationWeight: 12
   alignmentWeight: 2
   cohesionWeight: 3
-  clampVelocityY: 2
+  clampVelocityY: 0.8
   stopDistance: 100

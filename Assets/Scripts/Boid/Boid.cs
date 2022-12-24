@@ -6,7 +6,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 /// <summary>Boid単位</summary>
 public class Boid : MonoBehaviour
@@ -44,10 +43,14 @@ public class Boid : MonoBehaviour
         Velocity += m_accel * Time.deltaTime;
 
         // X回転(Y移動量)制限
+        // TODO: Clampだけではなく反発も試してみる
         {
             var newY = Mathf.Clamp(Velocity.y, -BoidParam.clampVelocityY, BoidParam.clampVelocityY);
             Velocity = new Vector3(Velocity.x, newY, Velocity.z);
         }
+
+        // TODO: ここでサメが来た際の高速分離
+        // separationをメタ的に変更して定期的にばらけさせるのもあり
 
         var dir = Velocity.normalized;
         var speed = Velocity.magnitude;
@@ -59,11 +62,13 @@ public class Boid : MonoBehaviour
         // ここの処理が入った場合、ENVの方にパラメータを見直してもらいたいのでLogを出す
         {
             var distance = Vector3.Distance(Position, BoidSystem.transform.position);
-            if (distance >= 24.0f)// TODO: システムから取得
+            if (distance >= BoidParam.returnDistance)
             {
                 Debug.Log("遊泳エリア外 復帰処理を行います パラメータの見直しを推奨.");
                 var newDir = BoidSystem.transform.position - Position;
-                Velocity = Mathf.Clamp(speed, BoidParam.minSpeed, BoidParam.maxSpeed) * newDir * 0.8f;
+                Velocity = Mathf.Clamp(speed, BoidParam.minSpeed, BoidParam.maxSpeed) * newDir;
+
+                // TODO: ここでPositionも補正
             }
         }
 
@@ -139,6 +144,7 @@ public class Boid : MonoBehaviour
         // 単独の場合はアクセル値の計算を行わない
         // TODO: ネイバーリストが形成されない場合、壁との反発で更新されたVelocityが原因で
         // 異様に早くなってしまう ->単体の場合はVelocityに制限をかけたほうがいい？
+        // ※仲間を探してるみたいでかわいいけど...
         if (numNeighbors <= 0) return;
 
         // アクセル値計算

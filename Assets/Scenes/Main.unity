@@ -282,9 +282,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_boidPrefab: {fileID: 6480857069364921560, guid: c190352d1fcace8438b721fca920c6b6, type: 3}
-  m_octree: {fileID: 466225929}
   m_param: {fileID: 11400000, guid: c9cb24ff6c229a747b6385f85a291c8b, type: 2}
-  m_boidCount: 500
+  m_boidCount: 400
 --- !u!1 &1989975626
 GameObject:
   m_ObjectHideFlags: 0
