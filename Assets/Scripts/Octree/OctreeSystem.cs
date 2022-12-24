@@ -23,8 +23,7 @@ public class OctreeSystem : MonoBehaviour
     [SerializeField] private int m_belongLevel = 0;
 
     //変数群 =============================================================
-    [NonSerialized] public List<GameObject> test = new();
-
+    private BoidSystem m_boidSystem;
     private LinearTreeManager<GameObject> m_linearTreeManager;
     private List<GameObject> m_collisionList;
 
@@ -36,6 +35,10 @@ public class OctreeSystem : MonoBehaviour
             Debug.LogError("線分8分木空間の生成失敗.");
 
         m_collisionList = new List<GameObject>(m_linearTreeManager.GetCellNum());
+
+        TryGetComponent(out m_boidSystem);
+        if (!m_boidSystem)
+            Debug.LogError("BoidSystem取得失敗 アタッチを確認してください.");
     }
 
     private void Update()
@@ -110,7 +113,7 @@ public class OctreeSystem : MonoBehaviour
 
         if (Application.isPlaying && m_viewBoidBounds)
         {
-            foreach (var b in test)
+            foreach (var b in m_boidSystem.BoidList)
             {
                 var bounds = b.GetComponent<Collider>().bounds;
                 Vector3 min = bounds.min;

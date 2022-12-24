@@ -11,15 +11,19 @@ using UnityEngine;
 public class BoidSystem : MonoBehaviour
 {
     [SerializeField] private GameObject m_boidPrefab;
-    [SerializeField] private OctreeSystem m_octree;
     [SerializeField] private BoidParam m_param;
     [SerializeField] private int m_boidCount = 100;
 
+    private OctreeSystem m_octree;
     private readonly List<Boid> m_boidList = new();
     public ReadOnlyCollection<Boid> BoidList { get { return m_boidList.AsReadOnly(); } }
 
     private void Start()
     {
+        TryGetComponent(out m_octree);
+        if (!m_octree)
+            Debug.LogError("BoidSystem取得失敗 アタッチを確認してください.");
+
         for (int i = 0; i < m_boidCount; i++)
             AddBoid(i);
     }
@@ -45,10 +49,7 @@ public class BoidSystem : MonoBehaviour
             m_boidList.Add(boid);
 
             if (m_octree)
-            {
                 m_octree.RegisterObject(instance);
-                m_octree.test.Add(instance);// TODO: テスト中
-            }
         }
     }
 

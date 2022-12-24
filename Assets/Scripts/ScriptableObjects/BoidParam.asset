@@ -16,7 +16,7 @@ MonoBehaviour:
   minSpeed: 4
   maxSpeed: 8
   neighborDistance: 3
-  neighborFov: 45
+  neighborFov: 64
   wallScale: 40
   wallDistance: 5
   wallWeight: 1

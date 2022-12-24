@@ -18,7 +18,6 @@ public class Boid : MonoBehaviour
     public Vector3 Velocity { get; private set; }
 
     private Vector3 m_accel = Vector3.zero;
-    private readonly List<Boid> m_neighborList = new();
 
     private void Start()
     {
@@ -29,8 +28,6 @@ public class Boid : MonoBehaviour
     private void Update()
     {
         // カメラから離れすぎていれば処理をしない
-        // Boxがでかすぎる場合に考慮してBoxの面との距離を算出したほうがいい？
-        // それかそもそもBoid単位に制限をかける？
         var cameraPos = Camera.main.transform.position;
         var distance = Vector3.Distance(cameraPos, Position);
         if (distance >= BoidParam.stopDistance) { Debug.Log("カメラとの距離が離れすぎているので処理を飛ばします."); return; }
@@ -110,6 +107,7 @@ public class Boid : MonoBehaviour
         // 要素で分離してもいいかも 例) separationは視界の判定を行わない
         int numNeighbors = 0;
 
+        // TODO: オーダー数どうにかせんと...
         foreach (var other in BoidSystem.BoidList)
         {
             if (other == this) continue;
@@ -127,6 +125,7 @@ public class Boid : MonoBehaviour
                     separation += (Position - other.Position).normalized;
                     alignment += other.Velocity;
                     cohesion += other.Position;
+
                     numNeighbors++;
                 }
             }
