@@ -45,6 +45,7 @@ public class BoidSystem : MonoBehaviour
         if (boid)
         {
             boid.BoidSystem = this;
+            boid.LinearTreeManager = m_octree.GetLinearTreeManager();
             boid.BoidParam = m_param;
             m_boidList.Add(boid);
 

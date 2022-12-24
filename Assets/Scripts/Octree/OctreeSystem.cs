@@ -27,6 +27,9 @@ public class OctreeSystem : MonoBehaviour
     private LinearTreeManager<GameObject> m_linearTreeManager;
     private List<GameObject> m_collisionList;
 
+    // TODO: アクセスをどうするか考える
+    public LinearTreeManager<GameObject> GetLinearTreeManager() { return m_linearTreeManager; }
+
     //関数群 =============================================================
     private void Awake()
     {

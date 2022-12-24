@@ -12,6 +12,7 @@ using UnityEngine.UIElements;
 public class Boid : MonoBehaviour
 {
     public BoidSystem BoidSystem { get; set; }
+    public LinearTreeManager<GameObject> LinearTreeManager { get; set; }
     public BoidParam BoidParam { get; set; }
 
     public Vector3 Position { get; private set; }
@@ -108,6 +109,10 @@ public class Boid : MonoBehaviour
         int numNeighbors = 0;
 
         // TODO: オーダー数どうにかせんと...
+        // こんな感じで取得したい↓
+        // var radius = 3.0f;
+        // LinearTreeManager.query(out neighbors, radius);
+
         foreach (var other in BoidSystem.BoidList)
         {
             if (other == this) continue;
