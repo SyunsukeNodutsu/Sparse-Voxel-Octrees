@@ -15,14 +15,14 @@ MonoBehaviour:
   initSpeed: 4
   minSpeed: 2
   maxSpeed: 6
-  neighborDistance: 3
+  neighborDistance: 2
   neighborFov: 64
   wallScale: 40
-  wallDistance: 10
-  returnDistance: 25
-  wallWeight: 1
+  wallDistance: 2
+  returnDistance: 22
+  wallWeight: 2
   separationWeight: 12
-  alignmentWeight: 2
-  cohesionWeight: 3
-  clampVelocityY: 0.8
+  alignmentWeight: 5.21
+  cohesionWeight: 6.2
+  clampVelocityY: 20
   stopDistance: 100

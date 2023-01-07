@@ -17,41 +17,55 @@ public class BoidSystem : MonoBehaviour
     private OctreeSystem m_octree;
     private readonly List<Boid> m_boidList = new();
     public ReadOnlyCollection<Boid> BoidList { get { return m_boidList.AsReadOnly(); } }
+    bool m_bSetupBoids = false;
 
     private void Start()
     {
         TryGetComponent(out m_octree);
         if (!m_octree)
             Debug.LogError("BoidSystem取得失敗 アタッチを確認してください.");
-
-        for (int i = 0; i < m_boidCount; i++)
-            AddBoid(i);
     }
 
-    void OnDrawGizmos()
+    private void Update()
+    {
+        if (!m_bSetupBoids)
+            m_bSetupBoids = SetupBoids();
+    }
+
+    private void OnDrawGizmos()
     {
         if (!m_param) return;
         Gizmos.color = Color.green;
         Gizmos.DrawWireCube(Vector3.zero, Vector3.one * m_param.wallScale);
     }
 
-    void AddBoid(int index)
+    private bool SetupBoids()
     {
-        var instance = Instantiate(m_boidPrefab, Random.insideUnitSphere, Random.rotation);
-        instance.transform.SetParent(transform);
-        instance.name = "Boid_" + index.ToString();
+        if (!m_octree) return false;
 
-        var boid = instance.GetComponent<Boid>();
-        if (boid)
+        var scale = m_param.wallScale * 0.5f;
+
+        for (int i = 0; i < m_boidCount; i++)
         {
-            boid.BoidSystem = this;
-            boid.LinearTreeManager = m_octree.GetLinearTreeManager();
-            boid.BoidParam = m_param;
-            m_boidList.Add(boid);
+            var emitPos = new Vector3(Random.Range(-scale, scale), Random.Range(-scale, scale), Random.Range(-scale, scale));
 
-            if (m_octree)
+            var instance = Instantiate(m_boidPrefab, emitPos, Random.rotation);
+            //var instance = Instantiate(m_boidPrefab, Vector3.zero, Quaternion.identity);
+            instance.name = "Boid_" + i.ToString();
+
+            var boid = instance.GetComponent<Boid>();
+            if (boid)
+            {
+                boid.BoidSystem = this;
+                boid.LinearTreeManager = m_octree.GetLinearTreeManager();
+                boid.BoidParam = m_param;
+
+                m_boidList.Add(boid);
                 m_octree.RegisterObject(instance);
+            }
         }
+
+        return true;
     }
 
 }

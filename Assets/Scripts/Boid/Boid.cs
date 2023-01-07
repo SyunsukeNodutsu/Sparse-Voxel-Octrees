@@ -3,8 +3,7 @@
 //
 // Boid単位
 //-----------------------------------------------------------------------------
-using System;
-using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>Boid単位</summary>
@@ -28,10 +27,8 @@ public class Boid : MonoBehaviour
     private void Update()
     {
         // カメラから離れすぎていれば処理をしない
-        var cameraPos = Camera.main.transform.position;
-        var distance = Vector3.Distance(cameraPos, Position);
-        if (distance >= BoidParam.stopDistance) { Debug.Log("カメラとの距離が離れすぎているので処理を飛ばします."); return; }
-        
+        if (OverStopDistance()) return;
+
         UpdateWalls();
         UpdateNeighbors();
         UpdateMove();
@@ -43,14 +40,10 @@ public class Boid : MonoBehaviour
         Velocity += m_accel * Time.deltaTime;
 
         // X回転(Y移動量)制限
-        // TODO: Clampだけではなく反発も試してみる
         {
-            var newY = Mathf.Clamp(Velocity.y, -BoidParam.clampVelocityY, BoidParam.clampVelocityY);
-            Velocity = new Vector3(Velocity.x, newY, Velocity.z);
+            //var newY = Mathf.Clamp(Velocity.y, -BoidParam.clampVelocityY, BoidParam.clampVelocityY);
+            //Velocity = new Vector3(Velocity.x, newY, Velocity.z);
         }
-
-        // TODO: ここでサメが来た際の高速分離
-        // separationをメタ的に変更して定期的にばらけさせるのもあり
 
         var dir = Velocity.normalized;
         var speed = Velocity.magnitude;
@@ -60,15 +53,17 @@ public class Boid : MonoBehaviour
 
         // BOX外の場合は補正
         // ここの処理が入った場合、ENVの方にパラメータを見直してもらいたいのでLogを出す
+        if (true)
         {
-            var distance = Vector3.Distance(Position, BoidSystem.transform.position);
-            if (distance >= BoidParam.returnDistance)
+            var distX = Mathf.Abs(BoidSystem.transform.position.x - Position.x);
+            var distY = Mathf.Abs(BoidSystem.transform.position.y - Position.y);
+            var distZ = Mathf.Abs(BoidSystem.transform.position.z - Position.z);
+
+            if (distX >= BoidParam.returnDistance || distY >= BoidParam.returnDistance || distZ >= BoidParam.returnDistance)
             {
                 Debug.Log("遊泳エリア外 復帰処理を行います パラメータの見直しを推奨.");
                 var newDir = BoidSystem.transform.position - Position;
                 Velocity = Mathf.Clamp(speed, BoidParam.minSpeed, BoidParam.maxSpeed) * newDir;
-
-                // TODO: ここでPositionも補正
             }
         }
 
@@ -85,7 +80,7 @@ public class Boid : MonoBehaviour
 
         Vector3 CalcAccelAgainstWall(float distance, Vector3 dir)
         {
-            if (distance < BoidParam.wallDistance)
+            if (Mathf.Abs(distance) < BoidParam.wallDistance)
                 return dir * (BoidParam.wallWeight / Mathf.Abs(distance / BoidParam.wallDistance));
             return Vector3.zero;
         }
@@ -113,11 +108,7 @@ public class Boid : MonoBehaviour
         // 要素で分離してもいいかも 例) separationは視界の判定を行わない
         int numNeighbors = 0;
 
-        // TODO: オーダー数どうにかせんと...
-        // こんな感じで取得したい↓
-        // var radius = 3.0f;
-        // LinearTreeManager.query(out neighbors, radius);
-
+        // TODO: オーダー数
         foreach (var other in BoidSystem.BoidList)
         {
             if (other == this) continue;
@@ -156,6 +147,14 @@ public class Boid : MonoBehaviour
 
         cohesion /= numNeighbors;
         m_accel += (cohesion - Position) * BoidParam.cohesionWeight;
+    }
+
+    /// <summary>停止距離を過ぎているかを返す</summary>
+    bool OverStopDistance()
+    {
+        var cameraPos = Camera.main.transform.position;
+        var distance = Vector3.Distance(cameraPos, Position);
+        return distance >= BoidParam.stopDistance;
     }
 
 }
