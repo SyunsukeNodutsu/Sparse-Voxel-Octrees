@@ -49,8 +49,8 @@ public class BoidSystem : MonoBehaviour
         {
             var emitPos = new Vector3(Random.Range(-scale, scale), Random.Range(-scale, scale), Random.Range(-scale, scale));
 
-            var instance = Instantiate(m_boidPrefab, emitPos, Random.rotation);
-            //var instance = Instantiate(m_boidPrefab, Vector3.zero, Quaternion.identity);
+            var instance = Instantiate(m_boidPrefab, emitPos, Random.rotation, transform);
+            //var instance = Instantiate(m_boidPrefab, Vector3.zero, Quaternion.identity, transform);
             instance.name = "Boid_" + i.ToString();
 
             var boid = instance.GetComponent<Boid>();

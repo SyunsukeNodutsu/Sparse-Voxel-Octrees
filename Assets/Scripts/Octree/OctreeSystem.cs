@@ -25,8 +25,6 @@ public class OctreeSystem : MonoBehaviour
     //変数群 =============================================================
     private BoidSystem m_boidSystem;
     private LinearTreeManager<GameObject> m_linearTreeManager;
-    private List<GameObject> m_collisionList;
-
     // TODO: アクセスをどうするか考える
     public LinearTreeManager<GameObject> GetLinearTreeManager() { return m_linearTreeManager; }
 
@@ -37,8 +35,6 @@ public class OctreeSystem : MonoBehaviour
         if (!m_linearTreeManager.Initialize(m_level, m_areaMin, m_areaMax))
             Debug.LogError("線分8分木空間の生成失敗.");
 
-        m_collisionList = new List<GameObject>(m_linearTreeManager.GetCellNum());
-
         TryGetComponent(out m_boidSystem);
         if (!m_boidSystem)
             Debug.LogError("BoidSystem取得失敗 アタッチを確認してください.");
@@ -48,16 +44,13 @@ public class OctreeSystem : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            m_collisionList.Clear();
-            m_linearTreeManager.GetCellRegisterList(0, m_collisionList);
-            Debug.Log("m_collisionList.Count: " + m_collisionList.Count);
+            List<GameObject> tmpList = new List<GameObject>();
+            m_linearTreeManager.GetCellRegisterList(1, tmpList);
 
-            int i = 0;
-            foreach (var col in m_collisionList)
-            {
-                Debug.Log("[" + i + "]name: " + col.name);
-                i++;
-            }
+            if (tmpList != null)
+                Debug.Log("tmpList size: " + tmpList.Count);
+            else
+                Debug.Log("tmpList size: " + 0 + "(null)");
         }
     }
 

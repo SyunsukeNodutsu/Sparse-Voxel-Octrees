@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a53831d0792e58f42b68a55071ff89cd, type: 3}
   m_Name: BoidParam
   m_EditorClassIdentifier: Assembly-CSharp::Param
-  initSpeed: 4
+  initSpeed: 2
   minSpeed: 2
-  maxSpeed: 6
-  neighborDistance: 2
+  maxSpeed: 4
+  neighborDistance: 4
   neighborFov: 64
   wallScale: 40
-  wallDistance: 2
+  wallDistance: 3
   returnDistance: 22
-  wallWeight: 2
-  separationWeight: 12
-  alignmentWeight: 5.21
-  cohesionWeight: 6.2
-  clampVelocityY: 20
+  wallWeight: 1
+  separationWeight: 0.5
+  alignmentWeight: 0.34
+  cohesionWeight: 0.16
+  clampAngleX: 45
   stopDistance: 100

@@ -20,6 +20,6 @@ public class BoidParam : ScriptableObject
     public float separationWeight = 5.0f;   // 分離
     public float alignmentWeight = 2.0f;    // 整列
     public float cohesionWeight = 3.0f;     // 結合
-    public float clampVelocityY = 0.2f;     // VelocityY制限 TODO: わかりにくいのでdegreeで設定させたい
+    public float clampAngleX = 10.0f;
     public float stopDistance = 100.0f;     // 処理を停止する距離
 }
